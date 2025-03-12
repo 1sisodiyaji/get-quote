@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Configuration</title>
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --primary-bg: #f0fdfa;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: var(--gray-100);
+            min-height: 100vh;
+            padding: 1rem;
+            color: var(--gray-800);
+        }
+
+        @media (min-width: 640px) {
+            body {
+                padding: 2rem;
+            }
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .progress-wrapper {
+            background: var(--white);
+            padding: 1.75rem;
+            border-radius: 1.25rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .progress-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .progress-percentage {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 999px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 22rem 1fr 22rem;
+            }
+        }
+
+        .steps-list {
+            background: var(--white);
+            padding: 1.75rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 2rem;
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .steps-list:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-item {
+            padding: 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            background: var(--white);
+        }
+
+        .step-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            background: var(--primary-bg);
+        }
+
+        .step-item.active {
+            background: var(--primary-bg);
+            border-color: var(--primary);
+        }
+
+        .step-item.completed {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+
+        .step-content {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-item.active .step-number {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step-item.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.375rem;
+        }
+
+        .step-info p {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .content-area {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .content-area:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .content-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .content-header p {
+            color: var(--gray-600);
+            font-size: 1.125rem;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .option-card {
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            background: var(--white);
+        }
+
+        .option-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .option-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+            transform: scale(1.02);
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .option-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .option-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .option-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .option-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .slider-container {
+            background: var(--primary-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 2px solid var(--primary-light);
+            margin: 2rem 0;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-label {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .slider-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--primary-light);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--gray-200);
+            outline: none;
+            margin: 1rem 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit {
+            background: var(--success);
+            color: white;
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: var(--success) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1023px) {
+            .steps-list {
+                position: relative;
+                top: 0;
+                margin-bottom: 2rem;
+            }
+
+            .content-area {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 639px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .content-header p {
+                font-size: 1rem;
+            }
+
+            .step-item {
+                padding: 1.25rem;
+            }
+
+            .slider-container {
+                padding: 1.5rem;
+            }
+        }
+
+        .summary-section {
+            background: var(--white);
+            padding: 1.75rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 2rem;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .summary-item {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .summary-item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            gap: 0.75rem;
+        }
+
+        .summary-step {
+            width: 1.75rem;
+            height: 1.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .summary-value {
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            margin-left: 2.5rem;
+        }
+
+        .summary-empty {
+            color: var(--gray-500);
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 0.75rem;
+            border: 1px dashed var(--gray-300);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-submit {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="progress-wrapper">
+            <div class="progress-info">
+                <span class="progress-text">Progress</span>
+                <span class="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="steps-list">
+                <!-- Steps will be rendered here -->
+            </div>
+
+            <div class="content-area">
+                <!-- Content will be rendered here -->
+            </div>
+
+            <div class="summary-section">
+                <!-- Summary will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const processData = {
+            steps: [
+                {
+                    id: 1,
+                    title: "Select Region",
+                    description: "Choose your deployment region",
+                    options: [
+                        { id: "us", title: "United States", description: "US-based servers for optimal performance in North America" },
+                        { id: "eu", title: "Europe", description: "EU-based servers for European compliance and low latency" },
+                        { id: "asia", title: "Asia Pacific", description: "APAC servers for better performance in Asian regions" }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Instance Type",
+                    description: "Select your computing resources",
+                    options: [
+                        { id: "small", title: "Basic", description: "1 CPU, 2GB RAM - Perfect for small applications", price: "$10/mo" },
+                        { id: "medium", title: "Standard", description: "2 CPU, 4GB RAM - Balanced performance", price: "$20/mo" },
+                        { id: "large", title: "Premium", description: "4 CPU, 8GB RAM - High performance applications", price: "$40/mo" }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Storage Configuration",
+                    description: "Choose storage capacity",
+                    slider: {
+                        min: 10,
+                        max: 1000,
+                        default: 100,
+                        unit: "GB"
+                    }
+                },
+                {
+                    id: 4,
+                    title: "Additional Features",
+                    description: "Select additional services",
+                    multiSelect: true,
+                    options: [
+                        { id: "backup", title: "Auto Backup", description: "Daily automated backups", price: "$5/mo" },
+                        { id: "cdn", title: "CDN", description: "Global content delivery network", price: "$10/mo" },
+                        { id: "monitoring", title: "Advanced Monitoring", description: "Detailed metrics and alerts", price: "$8/mo" }
+                    ]
+                }
+            ]
+        };
+
+        let currentStep = 1;
+        let selections = {
+            region: '',
+            instanceType: '',
+            storage: 10,
+            features: []
+        };
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func.apply(this, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function renderStep() {
+            const step = processData.steps.find(s => s.id === currentStep);
+            if (!step) return;
+
+            const contentArea = document.querySelector('.content-area');
+            let html = `
+                <div class="content-header">
+                    <h2>${step.title}</h2>
+                    <p>${step.description}</p>
+                </div>
+                <div class="error-message"></div>
+            `;
+
+            if (step.slider) {
+                html += `
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span class="slider-label">Storage Size</span>
+                            <span class="slider-value">${selections.storage} ${step.slider.unit}</span>
+                        </div>
+                        <input type="range" 
+                            min="${step.slider.min}" 
+                            max="${step.slider.max}" 
+                            value="${selections.storage}" 
+                            class="slider"
+                            oninput="updateUserSize(this.value)">
+                    </div>
+                `;
+            } else {
+                html += `<div class="options-grid">`;
+                step.options.forEach(option => {
+                    const isSelected = step.multiSelect 
+                        ? selections.features.includes(option.id)
+                        : (selections[getSelectionKey(step.id)] === option.id);
+                    
+                    html += `
+                        <div class="option-card ${isSelected ? 'selected' : ''}" 
+                             data-id="${option.id}" 
+                             onclick="selectOption('${option.id}')">
+                            <div class="option-content">
+                                <div class="option-header">
+                                    <span class="option-title">${option.title}</span>
+                                    ${option.price ? `<span class="option-price">${option.price}</span>` : ''}
+                                </div>
+                                <p class="option-description">${option.description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            html += `
+                <div class="btn-group">
+                    ${currentStep > 1 ? `<button class="btn btn-primary" onclick="prevStep()">Previous</button>` : '<div></div>'}
+                    ${currentStep < processData.steps.length 
+                        ? `<button class="btn btn-primary" onclick="nextStep()">Next</button>`
+                        : `<button class="btn btn-submit" onclick="handleSubmit()">Complete Setup</button>`}
+                </div>
+            `;
+
+            contentArea.innerHTML = html;
+            updateProgress();
+            renderSteps();
+            updateSummary();
+        }
+
+        function getSelectionKey(stepId) {
+            const keyMap = {
+                1: 'region',
+                2: 'instanceType'
+            };
+            return keyMap[stepId];
+        }
+
+        function selectOption(optionId) {
+            const step = processData.steps.find(s => s.id === currentStep);
+            if (!step) return;
+
+            if (step.multiSelect) {
+                const index = selections.features.indexOf(optionId);
+                if (index === -1) {
+                    selections.features.push(optionId);
+                } else {
+                    selections.features.splice(index, 1);
+                }
+            } else {
+                const key = getSelectionKey(step.id);
+                if (key) {
+                    selections[key] = optionId;
+                }
+            }
+
+            renderStep();
+            saveProgress();
+            updateSummary();
+            logFormInteraction('select_option', { step: currentStep, option: optionId });
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / processData.steps.length) * 100;
+            const progressFill = document.querySelector('.progress-fill');
+            const progressPercentage = document.querySelector('.progress-percentage');
+            
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+            if (progressPercentage) {
+                progressPercentage.textContent = `${Math.round(progress)}%`;
+            }
+        }
+
+        function renderSteps() {
+            const stepsList = document.querySelector('.steps-list');
+            let html = '';
+            
+            processData.steps.forEach(step => {
+                const isCompleted = step.id < currentStep;
+                const isActive = step.id === currentStep;
+                
+                html += `
+                    <div class="step-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
+                         onclick="navigateToStep(${step.id})">
+                        <div class="step-content">
+                            <div class="step-number">${step.id}</div>
+                            <div class="step-info">
+                                <h3>${step.title}</h3>
+                                <p>${step.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            stepsList.innerHTML = html;
+        }
+
+        function navigateToStep(step) {
+            if (validateCurrentStep()) {
+                currentStep = step;
+                renderStep();
+                logFormInteraction('navigate', { to_step: step });
+            }
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                currentStep++;
+                renderStep();
+                logFormInteraction('next_step', { from_step: currentStep - 1 });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                renderStep();
+                logFormInteraction('prev_step', { from_step: currentStep + 1 });
+            }
+        }
+
+        function updateUserSize(value) {
+            selections.storage = parseInt(value);
+            const sliderValue = document.querySelector('.slider-value');
+            if (sliderValue) {
+                sliderValue.textContent = `${value} GB`;
+            }
+            saveProgress();
+            updateSummary();
+            logFormInteraction('update_storage', { value });
+        }
+
+        function validateCurrentStep() {
+            const step = processData.steps.find(s => s.id === currentStep);
+            if (!step) return true;
+
+            let isValid = true;
+            let errorMessage = '';
+
+            if (!step.slider && !step.multiSelect) {
+                const key = getSelectionKey(step.id);
+                if (!selections[key]) {
+                    isValid = false;
+                    errorMessage = 'Please make a selection to continue';
+                }
+            }
+
+            const errorElement = document.querySelector('.error-message');
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+                errorElement.classList.toggle('visible', !isValid);
+            }
+
+            return isValid;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('deployment_selections', JSON.stringify(selections));
+            localStorage.setItem('deployment_step', currentStep.toString());
+        }
+
+        function loadSavedProgress() {
+            const savedSelections = localStorage.getItem('deployment_selections');
+            const savedStep = localStorage.getItem('deployment_step');
+
+            if (savedSelections) {
+                selections = JSON.parse(savedSelections);
+            }
+
+            if (savedStep) {
+                currentStep = parseInt(savedStep);
+            }
+        }
+
+        function handleSubmit() {
+            if (validateCurrentStep()) {
+                const submitButton = document.querySelector('.btn-submit');
+                submitButton.classList.add('loading');
+                submitButton.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    alert('Configuration saved successfully!');
+                    submitButton.classList.remove('loading');
+                    submitButton.disabled = false;
+                    localStorage.clear();
+                }, 2000);
+
+                logFormInteraction('submit', selections);
+            }
+        }
+
+        function logFormInteraction(action, data) {
+            console.log(`Form interaction: ${action}`, data);
+        }
+
+        function updateSummary() {
+            const summarySection = document.querySelector('.summary-section');
+            let html = `
+                <h2 class="summary-title">Overview</h2>
+            `;
+
+            if (Object.values(selections).some(val => val !== '' && val !== null && (!Array.isArray(val) || val.length > 0))) {
+                const steps = processData.steps;
+                steps.forEach(step => {
+                    let value = '';
+                    let showItem = false;
+
+                    switch (step.id) {
+                        case 1:
+                            if (selections.region) {
+                                const option = step.options.find(opt => opt.id === selections.region);
+                                value = option ? option.title : '';
+                                showItem = !!value;
+                            }
+                            break;
+                        case 2:
+                            if (selections.instanceType) {
+                                const option = step.options.find(opt => opt.id === selections.instanceType);
+                                value = option ? `${option.title} (${option.price})` : '';
+                                showItem = !!value;
+                            }
+                            break;
+                        case 3:
+                            if (selections.storage) {
+                                value = `${selections.storage} GB`;
+                                showItem = true;
+                            }
+                            break;
+                        case 4:
+                            if (selections.features && selections.features.length > 0) {
+                                const selectedFeatures = step.options
+                                    .filter(opt => selections.features.includes(opt.id))
+                                    .map(opt => `${opt.title} (${opt.price})`);
+                                value = selectedFeatures.join('<br>');
+                                showItem = true;
+                            }
+                            break;
+                    }
+
+                    if (showItem) {
+                        html += `
+                            <div class="summary-item">
+                                <div class="summary-item-header">
+                                    <div class="summary-step">${step.id}</div>
+                                    <div class="summary-label">${step.title}</div>
+                                </div>
+                                <div class="summary-value">${value}</div>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                html += `
+                    <div class="summary-empty">
+                        No selections made yet. Start by selecting options from the steps.
+                    </div>
+                `;
+            }
+
+            summarySection.innerHTML = html;
+        }
+
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedProgress();
+            renderStep();
+        });
+    </script>
+</body>
+
+</html>
