@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Notification</title>
+    <style> 
+        .popup1 {
+            position: fixed;
+            top: 12vh;
+            right: 2vw;
+            background: linear-gradient(135deg, #f9f9f9, #f2f2f2);
+            color: black;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ 
+        .popup1 span {
+            font-size: 1.2rem;
+            font-weight: regular;
+            color: black;
+        }
+ 
+        .popup1 button {
+            cursor: pointer;
+            font-weight: regular; 
+            border : none;
+            background: transparent;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .popup1 button:hover {
+            transform: scale(1.05);
+            text-decoration: underline; 
+        }
+
+        /* Close Button */
+        .close-btn1 {
+            color: black;
+            font-size: 1rem;
+            cursor: pointer; 
+            transition: background 0.3s;
+        }
+        .close-btn1:hover{
+            color: red;
+            text-decoration: none !important;
+        }
+
+        .row1 {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="popup1" id="popup1">
+        <span>We are hosting our platform and services in Africa!</span>
+        <div class="row1">
+            <a href="https://radius-ois.ai/gitex-africa/" ><button>Click Here</button></a>
+            <button class="close-btn1" onclick="closePopup()">X</button>
+        </div>
+    </div>
+
+    <script> 
+        function closePopup() {
+            const popup = document.getElementById("popup1");
+            popup.style.opacity = "0";
+            popup.style.transform = "translateY(-50px)";
+            setTimeout(() => popup.style.display = "none", 300);
+        }
+    </script>
+
+</body>
+
+</html>
