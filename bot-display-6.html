@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radius Tech Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #10b981;
+            --highlight: #f472b6;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(59, 130, 246, 0.1);
+            --premium-gradient: linear-gradient(135deg, #3b82f6, #10b981);
+            --card-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+            --bg-gradient: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden !important;
+        }
+
+        /* Preloader Styles */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            gap: 1rem;
+        }
+
+        .preloader-text {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+        }
+
+        .preloader-text:first-child {
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glitch 1s infinite;
+        }
+
+        .preloader-text:last-child {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 0.5s ease 0.2s backwards;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            position: relative;
+            height: 300px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: fadeInUp 0.6s ease backwards;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-content {
+            position: absolute;
+            inset: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.95));
+            transition: transform 0.3s ease;
+        }
+
+        .feature-image {
+            width: 150px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .feature-content h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .sidebar-item {
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+        }
+
+        .sidebar-item:hover {
+            background: var(--premium-gradient);
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+                opacity: 0.9;
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+                opacity: 1;
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+                opacity: 0.9;
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                bottom: 2rem;
+                right: 50%;
+                top: auto;
+                transform: translateX(50%);
+                flex-direction: row;
+            }
+        }
+
+        /* Add subtle background patterns */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="preloader">
+        <h1 class="preloader-text">Welcome to Radius</h1>
+        <p class="preloader-text">The Future of AI Management</p>
+    </section>
+
+    <main class="main-content">
+        <div class="feature-grid">
+            <!-- Feature Items -->
+            <div class="feature-item" style="animation-delay: 0.1s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2023/10/radius0logo.png" alt="About Radius"
+                        class="feature-image">
+                    <h3>About Radius</h3>
+                    <p>Platform that allows you to manage your AI agents.</p>
+                </div>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.2s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2025/04/guidance_meeting-room.png"
+                        alt="Book a Demo" class="feature-image">
+                    <h3>Book a Demo</h3>
+                    <p>Book a Demo to see Radius in action.</p>
+                </div>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.3s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2025/01/new-atomos-png.png" alt="Atomos"
+                        class="feature-image">
+                    <h3>Explore Atomos</h3>
+                    <p> <strong>Report To</strong> XYZ Officer</p>
+                </div>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.4s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2025/01/new-atomos-png-1.png" alt="Axis"
+                        class="feature-image">
+                    <h3>Explore Axis</h3>
+                    <p> <strong>Report To</strong> XYZ Officer</p>
+                </div>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.5s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2025/01/play-logo.png" alt="Play"
+                        class="feature-image">
+                    <h3>Explore Play</h3>
+                    <p> <strong>Report To</strong> XYZ Officer</p>
+                </div>
+            </div>
+            <div class="feature-item" style="animation-delay: 0.6s;">
+                <div class="feature-content">
+                    <img src="https://radius-ois.ai/wp-content/uploads/2025/01/sloop-logo.png" alt="Sloop"
+                        class="feature-image">
+                    <h3>Explore Sloop</h3>
+                    <p> <strong>Report To</strong> XYZ Officer</p>
+                </div>
+            </div>
+        </div>
+        <section style="margin-top: 7vh">
+            <div class="preloader-text"><img src="https://radius-ois.ai/wp-content/uploads/2023/10/radius0logo.png"
+                    alt="Radius" style="width: 25vw; height: 100px; object-fit: contain;"></div>
+            <p class="preloader-text">The Future of AI Management</p>
+        </section>
+    </main>
+ 
+    <div class="sidebar">
+        <div class="sidebar-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M2 22V4C2 3.45 2.196 2.97933 2.588 2.588C2.98 2.19667 3.45067 2.00067 4 2H20C20.55 2 21.021 2.196 21.413 2.588C21.805 2.98 22.0007 3.45067 22 4V16C22 16.55 21.8043 17.021 21.413 17.413C21.0217 17.805 20.5507 18.0007 20 18H6L2 22ZM6 14H14V12H6V14ZM6 11H18V9H6V11ZM6 8H18V6H6V8Z"
+                    fill="url(#paint0_angular)" />
+                <defs>
+                    <linearGradient id="paint0_angular" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#FF00FF" />
+                        <stop offset="1" stop-color="#00FFFF" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="sidebar-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M19.95 21C17.8667 21 15.8083 20.546 13.775 19.638C11.7417 18.73 9.89167 17.4423 8.225 15.775C6.55833 14.1077 5.271 12.2577 4.363 10.225C3.455 8.19233 3.00067 6.134 3 4.05C3 3.75 3.1 3.5 3.3 3.3C3.5 3.1 3.75 3 4.05 3H8.1C8.33333 3 8.54167 3.07933 8.725 3.238C8.90833 3.39667 9.01667 3.584 9.05 3.8L9.7 7.3C9.73333 7.56667 9.725 7.79167 9.675 7.975C9.625 8.15833 9.53333 8.31667 9.4 8.45L6.975 10.9C7.30833 11.5167 7.704 12.1123 8.162 12.687C8.62 13.2617 9.12433 13.816 9.675 14.35C10.1917 14.8667 10.7333 15.346 11.3 15.788C11.8667 16.23 12.4667 16.634 13.1 17L15.45 14.65C15.6 14.5 15.796 14.3877 16.038 14.313C16.28 14.2383 16.5173 14.2173 16.75 14.25L20.2 14.95C20.4333 15.0167 20.625 15.1377 20.775 15.313C20.925 15.4883 21 15.684 21 15.9V19.95C21 20.25 20.9 20.5 20.7 20.7C20.5 20.9 20.25 21 19.95 21Z"
+                    fill="url(#paint0_angular)" />
+                <defs>
+                    <linearGradient id="paint0_angular" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#D933FD" />
+                        <stop offset="1" stop-color="#6FD6F3" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="sidebar-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M15 8V16H5V8H15ZM16 6H4C3.73478 6 3.48043 6.10536 3.29289 6.29289C3.10536 6.48043 3 6.73478 3 7V17C3 17.2652 3.10536 17.5196 3.29289 17.7071C3.48043 17.8946 3.73478 18 4 18H16C16.2652 18 16.5196 17.8946 16.7071 17.7071C16.8946 17.5196 17 17.2652 17 17V13.5L21 17.5V6.5L17 10.5V7C17 6.73478 16.8946 6.48043 16.7071 6.29289C16.5196 6.10536 16.2652 6 16 6Z"
+                    fill="url(#paint0_angular)" />
+                <defs>
+                    <linearGradient id="paint0_angular" x1="3" y1="6" x2="21" y2="18" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#DD2FFD" />
+                        <stop offset="1" stop-color="#6FD6F3" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const preloader = document.querySelector('.preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                document.body.style.overflow = 'visible';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.querySelector('.feature-content').style.transform = 'translateZ(20px)';
+                item.querySelector('.feature-image').style.transform = 'scale(1.1)';
+            });
+
+            item.addEventListener('mouseleave', () => {
+                item.querySelector('.feature-content').style.transform = 'translateZ(0)';
+                item.querySelector('.feature-image').style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+
+</html>

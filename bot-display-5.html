@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radius Tech Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #fafbff;
+            --bg-secondary: rgba(255, 255, 255, 0.85);
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --accent-primary: #0984e3;
+            --accent-secondary: #00b894;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --premium-gradient: linear-gradient(135deg, #0984e3, #00b894);
+            --card-shadow: 0 8px 32px rgba(9, 132, 227, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background: var(--bg-primary);
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(9, 132, 227, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 184, 148, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(253, 121, 168, 0.05) 0%, transparent 50%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(148, 163, 184, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(226, 232, 240, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(148, 163, 184, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(226, 232, 240, 0.08) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 7fr 3fr;
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            min-height: 100vh;
+            padding: 30px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+            box-shadow: 0 0 40px rgba(148, 163, 184, 0.05);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .card {
+            position: relative;
+            min-height: 200px; 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); 
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .card-image {
+            width: auto;
+            max-width: 100%;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(9, 132, 227, 0.2));
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.08) translateY(-15px);
+            filter: drop-shadow(0 20px 20px rgba(9, 132, 227, 0.3));
+        }
+
+        .card-title {
+            font-family: sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-top: 10px;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInUp 0.6s ease-out forwards;
+            animation-delay: 0.8s;
+            cursor: pointer;
+        }
+
+        .card:hover .card-title {
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: scale(1.1);
+        }
+
+        .sidebar {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            animation: fadeInRight 0.8s ease-out forwards;
+            animation-delay: 0.9s;
+
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 4px 24px -1px rgba(0, 0, 0, 0.05),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar-item:hover {
+            background: var(--premium-gradient);
+            transform: translateX(10px) scale(1.02);
+            box-shadow:
+                0 10px 30px -5px rgba(9, 132, 227, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar-item svg {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-item:hover svg {
+            transform: scale(1.2) rotate(5deg);
+            animation-delay: 0.3s;
+        }
+
+        .sidebar-item span {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-item:hover span,
+        .sidebar-item:hover svg path {
+            color: white;
+            fill: white;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                transform: translateX(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Hover Effects */
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow:
+                0 20px 40px -5px rgba(9, 132, 227, 0.2),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-item {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(9, 132, 227, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--premium-gradient);
+            border-radius: 10px;
+            border: 3px solid var(--bg-primary);
+        }
+
+        /* Enhanced Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Card Content Reveal Animation */
+        .card p {
+            opacity: 1;
+            transform: translateY(0);
+            margin: 10px 0;
+            color: var(--text-secondary);
+        }
+
+        .card:hover p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Animated Background Shapes */
+        .dashboard-container::before {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg,
+                    rgba(9, 132, 227, 0.1),
+                    rgba(0, 184, 148, 0.1),
+                    rgba(253, 121, 168, 0.1));
+            filter: blur(50px);
+            border-radius: 50%;
+            top: -300px;
+            right: -300px;
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        .dashboard-container::after {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg,
+                    rgba(0, 184, 148, 0.1),
+                    rgba(253, 121, 168, 0.1),
+                    rgba(9, 132, 227, 0.1));
+            filter: blur(50px);
+            border-radius: 50%;
+            bottom: -200px;
+            left: -200px;
+            animation: rotate 15s linear infinite reverse;
+            z-index: -1;
+        }
+
+
+
+        /* Update text colors */
+        .card strong {
+            color: var(--accent-primary);
+        }
+
+        /* SVG icon colors */
+        .sidebar-item svg path {
+            fill: var(--accent-primary);
+        }
+
+        /* New animations */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(9, 132, 227, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(0, 184, 148, 0.3);
+            }
+        }
+
+        /* Apply new animations */
+        .card {
+            animation: glow 3s infinite alternate;
+        }
+
+        .card:hover {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="main-content">
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2023/10/radius0logo.png" alt="About Radius"
+                    class="card-image" style="width: 60%;">
+                <p>Platform that allows you to manage your AI agents.</p>
+                <h5 class="card-title">About Radius</h5>
+            </div>
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2025/04/guidance_meeting-room.png" alt="Book a Demo"
+                    class="card-image">
+                <p>Book a Demo to see Radius in action.</p>
+                <h5 class="card-title">Book a Demo</h5>
+            </div>
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2025/01/new-atomos-png.png" alt="Atomos"
+                    class="card-image">
+                <p> <strong>Report To</strong> XYZ Officer</p>
+                <h5 class="card-title">Explore Atomos</h5>
+            </div>
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2025/01/new-atomos-png-1.png" alt="Axis"
+                    class="card-image">
+                <p> <strong>Report To</strong> XYZ Officer</p>
+                <h5 class="card-title">Explore Axis</h5>
+            </div>
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2025/01/play-logo.png" alt="Play" class="card-image">
+                <p> <strong>Report To</strong> XYZ Officer</p>
+                <h5 class="card-title">Explore Play</h5>
+            </div>
+            <div class="card">
+                <img src="https://radius-ois.ai/wp-content/uploads/2025/01/sloop-logo.png" alt="Sloop"
+                    class="card-image">
+                <p> <strong>Report To</strong> XYZ Officer</p>
+                <h5 class="card-title">Explore Sloop</h5>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M2 22V4C2 3.45 2.196 2.97933 2.588 2.588C2.98 2.19667 3.45067 2.00067 4 2H20C20.55 2 21.021 2.196 21.413 2.588C21.805 2.98 22.0007 3.45067 22 4V16C22 16.55 21.8043 17.021 21.413 17.413C21.0217 17.805 20.5507 18.0007 20 18H6L2 22ZM6 14H14V12H6V14ZM6 11H18V9H6V11ZM6 8H18V6H6V8Z"
+                        fill="url(#paint0_angular)" />
+                    <defs>
+                        <linearGradient id="paint0_angular" x1="2" y1="2" x2="22" y2="22"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FF00FF" />
+                            <stop offset="1" stop-color="#00FFFF" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Call Agent</span>
+            </div>
+            <div class="sidebar-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19.95 21C17.8667 21 15.8083 20.546 13.775 19.638C11.7417 18.73 9.89167 17.4423 8.225 15.775C6.55833 14.1077 5.271 12.2577 4.363 10.225C3.455 8.19233 3.00067 6.134 3 4.05C3 3.75 3.1 3.5 3.3 3.3C3.5 3.1 3.75 3 4.05 3H8.1C8.33333 3 8.54167 3.07933 8.725 3.238C8.90833 3.39667 9.01667 3.584 9.05 3.8L9.7 7.3C9.73333 7.56667 9.725 7.79167 9.675 7.975C9.625 8.15833 9.53333 8.31667 9.4 8.45L6.975 10.9C7.30833 11.5167 7.704 12.1123 8.162 12.687C8.62 13.2617 9.12433 13.816 9.675 14.35C10.1917 14.8667 10.7333 15.346 11.3 15.788C11.8667 16.23 12.4667 16.634 13.1 17L15.45 14.65C15.6 14.5 15.796 14.3877 16.038 14.313C16.28 14.2383 16.5173 14.2173 16.75 14.25L20.2 14.95C20.4333 15.0167 20.625 15.1377 20.775 15.313C20.925 15.4883 21 15.684 21 15.9V19.95C21 20.25 20.9 20.5 20.7 20.7C20.5 20.9 20.25 21 19.95 21Z"
+                        fill="url(#paint0_angular)" />
+                    <defs>
+                        <linearGradient id="paint0_angular" x1="3" y1="3" x2="21" y2="21"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#D933FD" />
+                            <stop offset="1" stop-color="#6FD6F3" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Video Agent</span>
+            </div>
+            <div class="sidebar-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M15 8V16H5V8H15ZM16 6H4C3.73478 6 3.48043 6.10536 3.29289 6.29289C3.10536 6.48043 3 6.73478 3 7V17C3 17.2652 3.10536 17.5196 3.29289 17.7071C3.48043 17.8946 3.73478 18 4 18H16C16.2652 18 16.5196 17.8946 16.7071 17.7071C16.8946 17.5196 17 17.2652 17 17V13.5L21 17.5V6.5L17 10.5V7C17 6.73478 16.8946 6.48043 16.7071 6.29289C16.5196 6.10536 16.2652 6 16 6Z"
+                        fill="url(#paint0_angular)" />
+                    <defs>
+                        <linearGradient id="paint0_angular" x1="3" y1="6" x2="21" y2="18"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#DD2FFD" />
+                            <stop offset="1" stop-color="#6FD6F3" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Chat Agent</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
