@@ -41,10 +41,10 @@ const FuturisticControlPanel = () => {
         />
       </div>
 
-      <div className="w-full max-w-6xl h-screen max-h-screen relative z-10 p-8">
+      <div className="w-full h-screen max-h-screen relative z-10 p-8">
         
         {/* Main asymmetric layout */}
-        <div className="grid grid-cols-12 grid-rows-6 gap-4 h-5/6">
+        <div className="grid grid-cols-12 grid-rows-6 gap-4 h-full">
           {/* Left tall panel - System Status */}
           <div
             className={`col-span-3 row-span-6 rounded-2xl p-6 flex flex-col transition-all duration-300 ${activeSection === 'status' ? 'bg-black/80' : 'bg-black/60'}`}

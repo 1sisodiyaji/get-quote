@@ -89,7 +89,7 @@ const SurveyModal = ({ onClose }) => {
       );
 
       setSubmitted(true); 
-      setTimeout(onClose, 3500);
+      setTimeout(onClose, 1500);
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
